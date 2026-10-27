@@ -1,6 +1,6 @@
 # GUI and installer tests
 
-QuakeBundle has one user interface: the Qt application started by `quakebundle.py`
+QuakeDock has one user interface: the Qt application started by `quakedock.py`
 or the standalone executable. `quake_gui/worker.py` coordinates installation;
 `quake_installer/` contains the backend shared by both game editions.
 
@@ -9,7 +9,7 @@ Install the development dependencies and run the offline checks:
 ```sh
 python -m pip install -r scripts/requirements-gui.txt
 python -m unittest discover -s tests -v
-python quakebundle.py --smoke-test
+python quakedock.py --smoke-test
 ```
 
 On a headless Linux host, set `QT_QPA_PLATFORM=offscreen`. The **Build Qt6 desktop**
@@ -37,7 +37,7 @@ on Linux x64, Windows x64, macOS Intel, and macOS Apple Silicon.
   and secret-free arguments. Ordinary pipes cannot pass the console fixture.
 - The Linux/macOS package smoke test copies only the executable outside the
   checkout and validates its resources, configuration helpers, and rendering.
-- The Windows ZIP must contain only `QuakeBundle.exe`. Its smoke test runs
+- The Windows ZIP must contain only `QuakeDock.exe`. Its smoke test runs
   outside the checkout with Python removed
   from `PATH`. It checks the bundled console support with Windows' own `cmd.exe`,
   renders the GUI, and validates resources and configuration helpers.

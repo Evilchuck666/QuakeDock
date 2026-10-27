@@ -32,7 +32,7 @@ class BuildSpecTests(unittest.TestCase):
             if broken:
                 with self.assertRaises(SystemExit) as error:
                     runpy.run_path(
-                        str(root / "scripts" / "QuakeBundle.spec"),
+                        str(root / "scripts" / "QuakeDock.spec"),
                         init_globals={
                             "SPECPATH": str(root / "scripts"),
                             "Analysis": analysis,
@@ -46,7 +46,7 @@ class BuildSpecTests(unittest.TestCase):
             else:
                 with self.assertRaises(AnalysisReached):
                     runpy.run_path(
-                        str(root / "scripts" / "QuakeBundle.spec"),
+                        str(root / "scripts" / "QuakeDock.spec"),
                         init_globals={
                             "SPECPATH": str(root / "scripts"),
                             "Analysis": analysis,
@@ -90,7 +90,7 @@ class BuildSpecTests(unittest.TestCase):
                 # COLLECT and BUNDLE are deliberately unavailable: the output
                 # must not require a separate directory or application bundle.
                 runpy.run_path(
-                    str(root / "scripts" / "QuakeBundle.spec"),
+                    str(root / "scripts" / "QuakeDock.spec"),
                     init_globals={
                         "SPECPATH": str(root / "scripts"),
                         "Analysis": Mock(return_value=analysis),

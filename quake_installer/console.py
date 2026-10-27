@@ -10,7 +10,7 @@ try:
     from tqdm import tqdm
 except ImportError:
     sys.exit(
-        "Missing tqdm. Use the standalone QuakeBundle application, "
+        "Missing tqdm. Use the standalone QuakeDock application, "
         "or install scripts/requirements-gui.txt in the development environment."
     )
 

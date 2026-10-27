@@ -19,7 +19,7 @@ class BuildScriptsTests(unittest.TestCase):
             (Path(cwd) / "preview.png").write_bytes(b"preview")
 
         with tempfile.TemporaryDirectory() as directory:
-            executable = Path(directory) / "QuakeBundle"
+            executable = Path(directory) / "QuakeDock"
             executable.write_bytes(b"binary")
             with (
                 patch.dict(build.os.environ, {"QT_QPA_PLATFORM": "offscreen"}),
@@ -50,7 +50,7 @@ class BuildScriptsTests(unittest.TestCase):
             (Path(cwd) / "preview.png").write_bytes(b"synthetic preview")
 
         with tempfile.TemporaryDirectory() as directory:
-            executable = Path(directory) / "QuakeBundle.exe"
+            executable = Path(directory) / "QuakeDock.exe"
             executable.write_bytes(b"synthetic executable")
             with (
                 patch.object(build, "os", windows_os),
@@ -65,7 +65,7 @@ class BuildScriptsTests(unittest.TestCase):
             for system in ("linux", "windows", "macos"):
                 with self.subTest(system=system):
                     executable = Path(directory) / (
-                        "QuakeBundle.exe" if system == "windows" else "QuakeBundle"
+                        "QuakeDock.exe" if system == "windows" else "QuakeDock"
                     )
                     executable.write_bytes(b"synthetic executable")
                     # Packaging must supply executable permissions even when the
@@ -93,7 +93,7 @@ class BuildScriptsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "dist").mkdir()
-            (root / "dist/QuakeBundle").write_bytes(b"binary")
+            (root / "dist/QuakeDock").write_bytes(b"binary")
             with (
                 patch.object(build, "ROOT", root),
                 patch.object(build.platform, "system", return_value="Linux"),

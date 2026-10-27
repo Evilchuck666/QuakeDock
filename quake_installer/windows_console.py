@@ -86,7 +86,7 @@ def smoke_test(cwd):
     script = Path(cwd) / "console-smoke.cmd"
     script.write_text(
         '@echo off\nset /p "answer=Console input:"\n'
-        'if "%answer%"=="quakebundle-test" exit /b 0\nexit /b 7\n',
+        'if "%answer%"=="quakedock-test" exit /b 0\nexit /b 7\n',
         encoding="ascii",
     )
     pending = ""
@@ -97,7 +97,7 @@ def smoke_test(cwd):
         pending += chunk.decode("utf-8")
         if "Console input:" in pending and not answered:
             answered = True
-            send("quakebundle-test")
+            send("quakedock-test")
 
     code = run_console(
         [str(command_processor), "/d", "/q", "/c", str(script)],

@@ -1,18 +1,18 @@
-# 🎮 QuakeBundle
+# 🎮 QuakeDock
 
 **Back to Quake, with less setup.**
 
-QuakeBundle is a desktop installer and launcher for Quake. It brings the campaign
+QuakeDock is a desktop installer and launcher for Quake. It brings the campaign
 and multiplayer into one window, helping you download the game, set up an engine,
 and start playing on Windows, Linux, or macOS.
 
-## 🧩 Why QuakeBundle?
+## 🧩 Why QuakeDock?
 
 Getting Quake ready to play can involve several separate tasks: downloading your
 Steam copy, choosing an engine, putting files in the right folders, and editing
 configuration files.
 
-QuakeBundle brings those steps together. Choose how you want to play, pick an
+QuakeDock brings those steps together. Choose how you want to play, pick an
 installation folder, and let the application handle the downloads and setup.
 You can adjust your player settings and launch the game from the same window.
 
@@ -35,8 +35,8 @@ You can adjust your player settings and launch the game from the same window.
 ## 🚀 Getting started
 
 1. Download the package for your system from the
-   [latest release](https://github.com/Evilchuck666/QuakeBundle/releases/latest).
-2. Extract the package and open **QuakeBundle** (`QuakeBundle.exe` on Windows).
+   [latest release](https://github.com/Evilchuck666/QuakeDock/releases/latest).
+2. Extract the package and open **QuakeDock** (`QuakeDock.exe` on Windows).
 3. Choose **Campaign** or **Multiplayer**, select a folder, and enter your Steam
    username and player name.
 4. Start the installation and follow any Steam authentication prompts.
@@ -47,12 +47,12 @@ You can adjust your player settings and launch the game from the same window.
 
 | Platform | Latest stable release |
 | --- | --- |
-| GNU/Linux x64 | [Download](https://github.com/Evilchuck666/QuakeBundle/releases/latest/download/QuakeBundle-linux-x64.tar.gz) |
-| Windows x64 | [Download](https://github.com/Evilchuck666/QuakeBundle/releases/latest/download/QuakeBundle-windows-x64.zip) |
-| macOS Intel | [Download](https://github.com/Evilchuck666/QuakeBundle/releases/latest/download/QuakeBundle-macos-x64.zip) |
-| macOS Apple Silicon | [Download](https://github.com/Evilchuck666/QuakeBundle/releases/latest/download/QuakeBundle-macos-arm64.zip) |
+| GNU/Linux x64 | [Download](https://github.com/Evilchuck666/QuakeDock/releases/latest/download/QuakeDock-linux-x64.tar.gz) |
+| Windows x64 | [Download](https://github.com/Evilchuck666/QuakeDock/releases/latest/download/QuakeDock-windows-x64.zip) |
+| macOS Intel | [Download](https://github.com/Evilchuck666/QuakeDock/releases/latest/download/QuakeDock-macos-x64.zip) |
+| macOS Apple Silicon | [Download](https://github.com/Evilchuck666/QuakeDock/releases/latest/download/QuakeDock-macos-arm64.zip) |
 
-[Release notes](https://github.com/Evilchuck666/QuakeBundle/releases/latest)
+[Release notes](https://github.com/Evilchuck666/QuakeDock/releases/latest)
 
 ## 📋 What you need
 
@@ -67,7 +67,7 @@ downloaded during setup.
 
 ## 🔐 Your Steam account
 
-Your password and Steam Guard responses are sent to SteamCMD. QuakeBundle does
+Your password and Steam Guard responses are sent to SteamCMD. QuakeDock does
 not save or log them. SteamCMD may retain its own session for future installations.
 
 ## 📚 Learn more

@@ -19,7 +19,7 @@ SYSTEMS = {"Linux": "linux", "Darwin": "macos", "Windows": "windows"}
 
 def verify(executable, qt_platform="offscreen"):
     """Run only the copied executable, outside the checkout and build environment."""
-    with tempfile.TemporaryDirectory(prefix="QuakeBundle standalone ") as directory:
+    with tempfile.TemporaryDirectory(prefix="QuakeDock standalone ") as directory:
         directory = Path(directory)
         copied = directory / executable.name
         shutil.copy2(executable, copied)
@@ -48,7 +48,7 @@ def verify(executable, qt_platform="offscreen"):
 def archive(executable, system, architecture):
     """Publish an archive only after it is complete; keep the executable at its root."""
     suffix = ".tar.gz" if system == "linux" else ".zip"
-    destination = executable.parent / f"QuakeBundle-{system}-{architecture}{suffix}"
+    destination = executable.parent / f"QuakeDock-{system}-{architecture}{suffix}"
     with tempfile.TemporaryDirectory(dir=executable.parent) as temporary:
         staged = Path(temporary) / destination.name
         if system == "linux":
@@ -92,13 +92,13 @@ def main(argv=None):
             "PyInstaller",
             "--clean",
             "--noconfirm",
-            "scripts/QuakeBundle.spec",
+            "scripts/QuakeDock.spec",
         ],
         cwd=ROOT,
         check=True,
     )
     executable = (
-        ROOT / "dist" / ("QuakeBundle.exe" if system == "windows" else "QuakeBundle")
+        ROOT / "dist" / ("QuakeDock.exe" if system == "windows" else "QuakeDock")
     )
     if not executable.is_file():
         raise RuntimeError(f"Missing standalone executable: {executable}")

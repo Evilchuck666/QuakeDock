@@ -7,11 +7,11 @@ on:
       - 'quake_installer/**'
       - 'assets/**'
       - 'tests/**'
-      - 'quakebundle.py'
+      - 'quakedock.py'
       - 'scripts/build-*.sh'
       - 'scripts/build-windows.ps1'
       - 'scripts/build.py'
-      - 'scripts/QuakeBundle.spec'
+      - 'scripts/QuakeDock.spec'
       - 'scripts/requirements-*.txt'
       - 'README.md'
       - 'TECHNICAL_GUIDE.md'
@@ -59,7 +59,7 @@ jobs:
             xvfb xauth
       - run: python -m pip install -r scripts/requirements-build.txt
       - run: python -m unittest discover -s tests -v
-      - run: python quakebundle.py --smoke-test
+      - run: python quakedock.py --smoke-test
       - name: Build and verify the standalone package
         shell: bash
         run: |
@@ -71,13 +71,13 @@ jobs:
           python scripts/build.py --platform "$target"
       - name: Verify standalone X11 startup and shutdown (Linux)
         if: runner.os == 'Linux'
-        run: xvfb-run -a python -c 'from pathlib import Path; from scripts.build import verify; verify(Path("dist/QuakeBundle"), qt_platform="xcb")'
+        run: xvfb-run -a python -c 'from pathlib import Path; from scripts.build import verify; verify(Path("dist/QuakeDock"), qt_platform="xcb")'
       - uses: actions/upload-artifact@v6
         with:
-          name: QuakeBundle-${{ matrix.os }}
+          name: QuakeDock-${{ matrix.os }}
           path: |
-            dist/QuakeBundle-*.tar.gz
-            dist/QuakeBundle-*.zip
+            dist/QuakeDock-*.tar.gz
+            dist/QuakeDock-*.zip
           if-no-files-found: error
   release:
     name: Publish release
@@ -89,7 +89,7 @@ jobs:
       contents: write
 
     concurrency:
-      group: quakebundle-release
+      group: quakedock-release
       cancel-in-progress: false
 
     env:
@@ -121,7 +121,7 @@ jobs:
       - name: Download build packages
         uses: actions/download-artifact@v8
         with:
-          pattern: QuakeBundle-*
+          pattern: QuakeDock-*
           path: release-assets
           merge-multiple: true
 
@@ -132,10 +132,10 @@ jobs:
           cd release-assets
 
           for file in \
-            QuakeBundle-linux-x64.tar.gz \
-            QuakeBundle-windows-x64.zip \
-            QuakeBundle-macos-x64.zip \
-            QuakeBundle-macos-arm64.zip
+            QuakeDock-linux-x64.tar.gz \
+            QuakeDock-windows-x64.zip \
+            QuakeDock-macos-x64.zip \
+            QuakeDock-macos-arm64.zip
           do
             if [[ ! -s "$file" ]]; then
               echo "::error::Falta el paquete $file o está vacío."
@@ -144,10 +144,10 @@ jobs:
           done
 
           sha256sum \
-            QuakeBundle-linux-x64.tar.gz \
-            QuakeBundle-windows-x64.zip \
-            QuakeBundle-macos-x64.zip \
-            QuakeBundle-macos-arm64.zip \
+            QuakeDock-linux-x64.tar.gz \
+            QuakeDock-windows-x64.zip \
+            QuakeDock-macos-x64.zip \
+            QuakeDock-macos-arm64.zip \
             > SHA256SUMS.txt
 
       - name: Create tag and publish release
@@ -156,12 +156,12 @@ jobs:
           set -euo pipefail
 
           gh release create "v$VERSION" \
-            release-assets/QuakeBundle-linux-x64.tar.gz \
-            release-assets/QuakeBundle-windows-x64.zip \
-            release-assets/QuakeBundle-macos-x64.zip \
-            release-assets/QuakeBundle-macos-arm64.zip \
+            release-assets/QuakeDock-linux-x64.tar.gz \
+            release-assets/QuakeDock-windows-x64.zip \
+            release-assets/QuakeDock-macos-x64.zip \
+            release-assets/QuakeDock-macos-arm64.zip \
             release-assets/SHA256SUMS.txt \
             --target "$RELEASE_SHA" \
-            --title "QuakeBundle v$VERSION" \
+            --title "QuakeDock v$VERSION" \
             --generate-notes \
             --latest

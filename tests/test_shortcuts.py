@@ -26,7 +26,7 @@ class ShortcutTests(unittest.TestCase):
     name = "Quake Single Player (vkQuake Port)"
     desktop = "vkQuake.desktop"
     icon = "vkQuake"
-    bundle_id = "com.quakebundle.singleplayer"
+    bundle_id = "com.quakedock.singleplayer"
 
     def setUp(self):
         """Prepare an isolated home directory and native shortcut fixtures."""
@@ -51,7 +51,7 @@ class ShortcutTests(unittest.TestCase):
         """Copy the local desktop template after checking the requested URL."""
         self.assertEqual(
             url,
-            "https://raw.githubusercontent.com/Evilchuck666/QuakeBundle/main/"
+            "https://raw.githubusercontent.com/Evilchuck666/QuakeDock/main/"
             f"assets/links/{self.desktop}",
         )
         shutil.copyfile(self.template, destination)
@@ -393,4 +393,4 @@ class EzQuakeShortcutTests(ShortcutTests):
     name = "Quake Multiplayer (ezQuake Port)"
     desktop = "ezQuake.desktop"
     icon = "ezQuake"
-    bundle_id = "com.quakebundle.multiplayer"
+    bundle_id = "com.quakedock.multiplayer"

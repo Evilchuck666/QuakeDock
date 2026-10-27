@@ -1,4 +1,4 @@
-# QuakeBundle technical guide
+# QuakeDock technical guide
 
 [Back to the project overview](README.md)
 
@@ -10,18 +10,18 @@ player settings, Steam authentication, and installation progress.
 
 The distribution package contains **Python, Qt6, TLS certificates, icons, and
 configuration files in a single executable**. Users do not need to install
-Python, pip, or Qt. Extract the package and open `QuakeBundle` (Linux/macOS) or
-`QuakeBundle.exe` (Windows). No accompanying `_internal` directory is needed.
+Python, pip, or Qt. Extract the package and open `QuakeDock` (Linux/macOS) or
+`QuakeDock.exe` (Windows). No accompanying `_internal` directory is needed.
 
 ### Download for Windows
 
-1. Open [Build Qt6 desktop on GitHub Actions](https://github.com/Evilchuck666/QuakeBundle/actions/workflows/desktop.yml)
+1. Open [Build Qt6 desktop on GitHub Actions](https://github.com/Evilchuck666/QuakeDock/actions/workflows/desktop.yml)
    and select a successful run.
-2. Under **Artifacts**, download **QuakeBundle-windows-2025** (Windows x64).
+2. Under **Artifacts**, download **QuakeDock-windows-2025** (Windows x64).
    GitHub requires you to sign in to download artifacts.
 3. Extract the artifact ZIP, then extract the
-   `QuakeBundle-windows-x64.zip` archive inside it.
-4. Open **`QuakeBundle.exe`**. This is the only file needed to run the GUI.
+   `QuakeDock-windows-x64.zip` archive inside it.
+4. Open **`QuakeDock.exe`**. This is the only file needed to run the GUI.
 
 You do not need to install Python, pip, or PySide6, or run any commands.
 **Code → Download ZIP** downloads the source code, not the standalone application.
@@ -48,7 +48,7 @@ Installation requires an Internet connection and a Steam account that owns Quake
 SteamCMD, the engines, and the game data are downloaded during installation; they
 are not included in the package. Password and Steam Guard prompts appear in the
 window, and responses are sent through process input, never as arguments.
-QuakeBundle does not save or log them; SteamCMD may retain its own Steam session.
+QuakeDock does not save or log them; SteamCMD may retain its own Steam session.
 On Windows, login uses a hidden virtual console (ConPTY) to receive password and
 Steam Guard prompts. This support is included in the standalone package; no
 additional Python installation or components are required.
@@ -62,7 +62,10 @@ cleanup removes temporary game downloads and keeps SteamCMD.
 
 For a recognized installation, **Play** works without signing in again and lets
 you select installed expansions. Settings are saved in the game's configuration
-files. The folder and username are remembered through QSettings.
+files. The folder and username are remembered through QSettings under the
+`QuakeDock` organization and application names. QuakeDock starts with its own
+application preferences. To reuse an existing game installation, select its
+folder; game files and configuration remain in place and are detected by the GUI.
 
 ## Development and builds
 
@@ -72,9 +75,9 @@ With `uv` installed, run the appropriate script **on the target operating system
 
 | System | Command | Generated package |
 | --- | --- | --- |
-| GNU/Linux | `./scripts/build-linux.sh` | `dist/QuakeBundle-linux-x64.tar.gz` |
-| Windows PowerShell | `.\scripts\build-windows.ps1` | `dist/QuakeBundle-windows-x64.zip` |
-| macOS | `./scripts/build-macos.sh` | `dist/QuakeBundle-macos-x64.zip` or `dist/QuakeBundle-macos-arm64.zip` |
+| GNU/Linux | `./scripts/build-linux.sh` | `dist/QuakeDock-linux-x64.tar.gz` |
+| Windows PowerShell | `.\scripts\build-windows.ps1` | `dist/QuakeDock-windows-x64.zip` |
+| macOS | `./scripts/build-macos.sh` | `dist/QuakeDock-macos-x64.zip` or `dist/QuakeDock-macos-arm64.zip` |
 
 The scripts use `uv` to obtain Python 3.13 and the dependencies listed in
 `scripts/requirements-build.txt` in an isolated environment. They then build the
@@ -99,8 +102,8 @@ python -m venv .venv
 source .venv/bin/activate
 # Windows PowerShell: .venv\Scripts\Activate.ps1
 python -m pip install -r scripts/requirements-build.txt
-python quakebundle.py
-python -m PyInstaller --noconfirm scripts/QuakeBundle.spec
+python quakedock.py
+python -m PyInstaller --noconfirm scripts/QuakeDock.spec
 ```
 
 In **Windows PowerShell**, to use the same Python 3.13 version as CI, install
@@ -109,7 +112,7 @@ that version on the build machine and run:
 ```powershell
 py -3.13 -m venv .venv-build
 .\.venv-build\Scripts\python.exe -m pip install -r scripts/requirements-build.txt
-.\.venv-build\Scripts\python.exe -m PyInstaller --clean --noconfirm .\scripts\QuakeBundle.spec
+.\.venv-build\Scripts\python.exe -m PyInstaller --clean --noconfirm .\scripts\QuakeDock.spec
 ```
 
 Installing PyInstaller alone is not enough: all dependencies must be in the same
@@ -117,23 +120,26 @@ environment used for the build. The `.spec` checks their imports and stops the
 build if any are missing or cannot be loaded. This Python installation is only
 needed for building; the resulting package includes the interpreter and the GUI.
 
-The output is **`dist/QuakeBundle`** on Linux/macOS or **`dist/QuakeBundle.exe`**
+The output is **`dist/QuakeDock`** on Linux/macOS or **`dist/QuakeDock.exe`**
 on Windows. The `.spec` already defines `onefile` mode; use the same build command
 without adding `--onefile`. The build includes Qt plugins through PyInstaller's
 hooks.
 
 On macOS, the build produces a standalone Mach-O binary that you can run with
-`./dist/QuakeBundle`. It does not produce an `.app`: that format is a directory,
+`./dist/QuakeDock`. It does not produce an `.app`: that format is a directory,
 even though Finder displays it as an application. Integration specific to an
 `.app` (such as its application metadata) requires distributing that format.
 
 If you previously built the directory format, PyInstaller replaces
-`dist/QuakeBundle/` with the executable when rebuilding with `--noconfirm`.
+`dist/QuakeDock/` with the executable when rebuilding with `--noconfirm`.
 Previously downloaded packages retain their original format.
 
 The **Build Qt6 desktop** workflow builds, verifies, and archives the applications
 for Linux x64, Windows x64, macOS Intel, and Apple Silicon. The artifacts are
-unsigned packages; the workflow does not publish releases.
+unsigned packages. To publish a release, run the workflow manually from `main`
+with an unused version in `MAJOR.MINOR.PATCH` format, without a leading `v`.
+After all builds pass, it creates the version tag and publishes the four packages
+and `SHA256SUMS.txt` as the latest GitHub release.
 
 On Linux, the executable uses the desktop's `libxkbcommon` and
 `libxkbcommon-x11` together. Bundling only one can crash on newer distributions
@@ -153,15 +159,15 @@ licenses. Qt/PySide6 are distributed as dynamic libraries.
 
 ```sh
 python -m unittest discover -s tests -v
-python quakebundle.py --smoke-test
+python quakedock.py --smoke-test
 ```
 
 On headless Linux, prefix the command with `QT_QPA_PLATFORM=offscreen`. To save
-a window preview: `python quakebundle.py --smoke-test --screenshot preview.png`.
+a window preview: `python quakedock.py --smoke-test --screenshot preview.png`.
 Also check the compiled package:
 
 ```sh
-QT_QPA_PLATFORM=offscreen dist/QuakeBundle --smoke-test
+QT_QPA_PLATFORM=offscreen dist/QuakeDock --smoke-test
 ```
 
 Tests use synthetic processes and files, without credentials or commercial game

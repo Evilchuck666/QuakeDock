@@ -28,13 +28,13 @@ VKQUAKE_SHORTCUT = Shortcut(
     engine="vkQuake",
     name="Quake Single Player (vkQuake Port)",
     icon="vkQuake",
-    bundle_id="com.quakebundle.singleplayer",
+    bundle_id="com.quakedock.singleplayer",
 )
 EZQUAKE_SHORTCUT = Shortcut(
     engine="ezQuake",
     name="Quake Multiplayer (ezQuake Port)",
     icon="ezQuake",
-    bundle_id="com.quakebundle.multiplayer",
+    bundle_id="com.quakedock.multiplayer",
 )
 AUTOMATOR_STUB = Path(
     "/System/Library/CoreServices/Automator Application Stub.app/Contents/MacOS/"
@@ -67,7 +67,7 @@ def create_linux_shortcut(root, python, fetch, shortcut: Shortcut, *, command=No
     directory.mkdir(parents=True, exist_ok=True)
     destination = directory / f"{shortcut.engine}.desktop"
     url = (
-        "https://raw.githubusercontent.com/Evilchuck666/QuakeBundle/main/"
+        "https://raw.githubusercontent.com/Evilchuck666/QuakeDock/main/"
         f"assets/links/{destination.name}"
     )
     with tempfile.TemporaryDirectory(prefix=".quake-shortcut-", dir=directory) as tmp:

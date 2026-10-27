@@ -22,7 +22,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     if sys.version_info < (3, 10):  # noqa: UP036 - source may be launched with an older system Python.
-        raise RuntimeError("QuakeBundle requires Python 3.10 or newer.")
+        raise RuntimeError("QuakeDock requires Python 3.10 or newer.")
 
     from PySide6.QtCore import QLockFile, QSettings, QTemporaryDir, QTimer
     from PySide6.QtWidgets import QApplication, QMessageBox
@@ -32,8 +32,8 @@ def main(argv=None):
     from quake_installer.config import BASE_DIR
 
     app = QApplication([sys.argv[0]])
-    app.setApplicationName("QuakeBundle")
-    app.setOrganizationName("QuakeBundle")
+    app.setApplicationName("QuakeDock")
+    app.setOrganizationName("QuakeDock")
     app.setStyle("Fusion")
     temporary = None
     lock = None
@@ -48,13 +48,13 @@ def main(argv=None):
     else:
         # Both editions share SteamCMD and its download directory.
         BASE_DIR.mkdir(parents=True, exist_ok=True)
-        lock = QLockFile(str(BASE_DIR / "quakebundle.lock"))
+        lock = QLockFile(str(BASE_DIR / "quakedock.lock"))
         lock.setStaleLockTime(0)
         if not lock.tryLock(100):
             QMessageBox.information(
                 None,
-                "QuakeBundle",
-                "QuakeBundle is already open. Use the existing window.",
+                "QuakeDock",
+                "QuakeDock is already open. Use the existing window.",
             )
             return 1
     window = MainWindow(settings)
@@ -105,12 +105,12 @@ def run(argv=None):
     try:
         return main(argv)
     except Exception as error:  # noqa: BLE001 - surface startup failures when no console exists.
-        message = "QuakeBundle could not start.\n\n" + traceback.format_exc()
+        message = "QuakeDock could not start.\n\n" + traceback.format_exc()
         if isinstance(error, ImportError) and not getattr(sys, "frozen", False):
             message += (
-                "\nThis is the source code. To use QuakeBundle without installing "
+                "\nThis is the source code. To use QuakeDock without installing "
                 "Python or Qt, extract the standalone package for your system "
-                "and open QuakeBundle.exe (Windows) or QuakeBundle (Linux/macOS).\n"
+                "and open QuakeDock.exe (Windows) or QuakeDock (Linux/macOS).\n"
             )
         if sys.stderr is not None:
             print(message, file=sys.stderr)
@@ -118,7 +118,7 @@ def run(argv=None):
             # Qt itself may have failed to import, so use a native dialog.
             import ctypes
 
-            ctypes.windll.user32.MessageBoxW(None, message, "QuakeBundle", 0x10)
+            ctypes.windll.user32.MessageBoxW(None, message, "QuakeDock", 0x10)
         return 1
 
 

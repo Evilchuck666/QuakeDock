@@ -1,4 +1,4 @@
-# Build on the target OS: python -m PyInstaller --noconfirm scripts/QuakeBundle.spec
+# Build on the target OS: python -m PyInstaller --noconfirm scripts/QuakeDock.spec
 from pathlib import Path
 import importlib
 import sys
@@ -18,7 +18,7 @@ for module in required_modules:
         dependency_errors.append(f"  {module}: {error}")
 if dependency_errors:
     raise SystemExit(
-        "Cannot build QuakeBundle: missing or unusable GUI dependencies.\n"
+        "Cannot build QuakeDock: missing or unusable GUI dependencies.\n"
         + "\n".join(dependency_errors)
         + f"\nBuild interpreter: {sys.executable}\n"
         + "Install scripts/requirements-build.txt with this same interpreter before building.\n"
@@ -29,7 +29,7 @@ console_datas, console_binaries, console_imports = (
     collect_all("winpty") if sys.platform == "win32" else ([], [], [])
 )
 analysis = Analysis(
-    [str(root / "quakebundle.py")],
+    [str(root / "quakedock.py")],
     pathex=[str(root)],
     datas=[(str(root / "assets" / "cfg"), "assets/cfg"),
            (str(root / "assets" / "icons"), "assets/icons"),
@@ -52,7 +52,7 @@ if sys.platform == "linux":
 pyz = PYZ(analysis.pure)
 exe = EXE(
     pyz, analysis.scripts, analysis.binaries, analysis.datas, [],
-    name="QuakeBundle", debug=False, strip=False, upx=False,
+    name="QuakeDock", debug=False, strip=False, upx=False,
     console=False, icon=str(root / "assets" / "icons" / "vkQuake.ico"),
 )
 # One executable on every platform. A macOS .app is a directory bundle,

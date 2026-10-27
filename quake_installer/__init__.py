@@ -1,1 +1,1 @@
-"""Installation backend for the QuakeBundle GUI: Steam, game data and engines."""
+"""Installation backend for the QuakeDock GUI: Steam, game data and engines."""

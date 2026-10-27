@@ -1,4 +1,4 @@
-"""The QuakeBundle desktop: installation, Steam authentication and native play."""
+"""The QuakeDock desktop: installation, Steam authentication and native play."""
 
 from __future__ import annotations
 
@@ -90,14 +90,14 @@ class MainWindow(QMainWindow):
         self.settings = (
             settings
             if settings is not None
-            else QSettings("QuakeBundle", "QuakeBundle")
+            else QSettings("QuakeDock", "QuakeDock")
         )
         self.edition = EDITIONS["singleplayer"]
         self.worker = None
         self.game = None
         self.outcome = None
         self.close_pending = False
-        self.setWindowTitle("QuakeBundle")
+        self.setWindowTitle("QuakeDock")
         self.setWindowIcon(QIcon(str(ASSETS / "icons/vkQuake.png")))
         self.resize(1120, 850)
         self.setMinimumSize(920, 700)
@@ -113,7 +113,7 @@ class MainWindow(QMainWindow):
         outer.setContentsMargins(30, 24, 30, 18)
         outer.setSpacing(20)
         header = QHBoxLayout()
-        header.addWidget(label("Q  /  QUAKEBUNDLE", "eyebrow"))
+        header.addWidget(label("Q  /  QUAKEDOCK", "eyebrow"))
         header.addStretch()
         header.addWidget(label("YOUR GATEWAY TO QUAKE", "muted"))
         outer.addLayout(header)
@@ -296,7 +296,7 @@ class MainWindow(QMainWindow):
         auth.addWidget(send)
         auth.addWidget(
             label(
-                "Sent to SteamCMD. QuakeBundle does not save this response.",
+                "Sent to SteamCMD. QuakeDock does not save this response.",
                 "muted",
                 True,
             )
@@ -665,7 +665,7 @@ class MainWindow(QMainWindow):
     def error(self, message):
         box = QMessageBox(self)
         box.setIcon(QMessageBox.Icon.Warning)
-        box.setWindowTitle("QuakeBundle")
+        box.setWindowTitle("QuakeDock")
         box.setTextFormat(Qt.TextFormat.PlainText)
         box.setText(message)
         box.exec()
@@ -676,7 +676,7 @@ class MainWindow(QMainWindow):
             self.cancel_install()
             event.ignore()
         elif self.game:
-            self.activity.setText("Close the game before exiting QuakeBundle.")
+            self.activity.setText("Close the game before exiting QuakeDock.")
             event.ignore()
         else:
             self.settings.sync()

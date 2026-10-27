@@ -85,4 +85,4 @@ TAIL_LINES = 25
 DOWNLOAD_CHUNK_SIZE = 1024 * 1024
 
 # GitHub's API rejects requests without a User-Agent.
-USER_AGENT = "QuakeBundle"
+USER_AGENT = "QuakeDock"

@@ -24,7 +24,7 @@ from urllib.request import urlopen
 from xml.parsers.expat import ExpatError
 
 CONFIG_FILES = ("autoexec.cfg", "game.cfg", "player.cfg")
-CONFIG_BASE_URL = "https://raw.githubusercontent.com/Evilchuck666/QuakeBundle/main/assets/cfg/vkQuake/"
+CONFIG_BASE_URL = "https://raw.githubusercontent.com/Evilchuck666/QuakeDock/main/assets/cfg/vkQuake/"
 
 NEEDS_SETUP = 2
 
