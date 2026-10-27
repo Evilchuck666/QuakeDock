@@ -15,7 +15,7 @@ Python, pip, or Qt. Extract the package and open `QuakeDock` (Linux/macOS) or
 
 ### Download for Windows
 
-1. Open [Build Qt6 desktop on GitHub Actions](https://github.com/Evilchuck666/QuakeDock/actions/workflows/desktop.yml)
+1. Open [Build Qt6 desktop on GitHub Actions](https://github.com/Evilchuck666/QuakeDock/actions/workflows/release.yml)
    and select a successful run.
 2. Under **Artifacts**, download **QuakeDock-windows-2025** (Windows x64).
    GitHub requires you to sign in to download artifacts.

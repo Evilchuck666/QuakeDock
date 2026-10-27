@@ -15,7 +15,7 @@ on:
       - 'scripts/requirements-*.txt'
       - 'README.md'
       - 'TECHNICAL_GUIDE.md'
-      - '.github/workflows/desktop.yml'
+      - '.github/workflows/release.yml'
   pull_request:
   workflow_dispatch:
     inputs:
