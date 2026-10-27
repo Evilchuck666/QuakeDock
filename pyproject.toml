@@ -1,0 +1,19 @@
+[project]
+name = "quakedock"
+version = "1.0.0"
+description = "Desktop installer and launcher for Quake"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "PySide6>=6.8,<7",
+    "tqdm>=4.67,<5",
+    "certifi>=2025.1.31",
+    "pywinpty>=3.0.5,<4; sys_platform == 'win32'",
+]
+
+[dependency-groups]
+dev = ["PyInstaller>=6.16,<7"]
+
+[tool.uv]
+# Run from the checkout: the application loads assets relative to its source.
+package = false

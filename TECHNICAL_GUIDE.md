@@ -69,6 +69,40 @@ folder; game files and configuration remain in place and are detected by the GUI
 
 ## Development and builds
 
+### Development environment with uv
+
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run
+these commands from the repository root:
+
+```sh
+uv sync --locked
+uv run --locked python quakedock.py
+```
+
+`uv sync --locked` creates `.venv`, obtains Python 3.13 if needed (as selected by
+`.python-version`), and installs the versions recorded in `uv.lock`. The default
+environment includes the GUI dependencies and PyInstaller for local builds;
+`pywinpty` is installed only on Windows. No environment activation is needed
+when using `uv run`. Run the application from the checkout so its assets remain
+available.
+
+To verify the environment or build the application:
+
+```sh
+uv run --locked python -m unittest discover -s tests -v
+uv run --locked python quakedock.py --smoke-test
+uv run --locked python -m PyInstaller --noconfirm scripts/QuakeDock.spec
+```
+
+On headless Linux, set `QT_QPA_PLATFORM=offscreen` for tests and the smoke test.
+The native desktop libraries described below are still required; `uv` manages
+Python dependencies only.
+
+`pyproject.toml` defines the uv environment. When changing dependencies, keep
+the corresponding `scripts/requirements-*.txt` entries in sync for the existing
+build scripts and CI, run `uv lock`, and commit both `pyproject.toml` and
+`uv.lock`. Use `uv lock --upgrade` only when intentionally updating locked versions.
+
 ### Build scripts
 
 With `uv` installed, run the appropriate script **on the target operating system**:

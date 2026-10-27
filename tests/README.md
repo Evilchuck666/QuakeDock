@@ -7,9 +7,9 @@ or the standalone executable. `quake_gui/worker.py` coordinates installation;
 Install the development dependencies and run the offline checks:
 
 ```sh
-python -m pip install -r scripts/requirements-gui.txt
-python -m unittest discover -s tests -v
-python quakedock.py --smoke-test
+uv sync --locked
+uv run --locked python -m unittest discover -s tests -v
+uv run --locked python quakedock.py --smoke-test
 ```
 
 On a headless Linux host, set `QT_QPA_PLATFORM=offscreen`. The **Build Qt6 desktop**

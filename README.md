@@ -72,6 +72,17 @@ not save or log them. SteamCMD may retain its own session for future installatio
 
 ## 📚 Learn more
 
+To develop from a source checkout, install [uv](https://docs.astral.sh/uv/getting-started/installation/)
+and run from the repository root:
+
+```sh
+uv sync --locked
+uv run --locked python quakedock.py
+```
+
+This creates `.venv` with Python 3.13 and the locked development dependencies.
+See the technical guide for native system requirements and verification.
+
 - [Technical guide](TECHNICAL_GUIDE.md): detailed installation information,
   platform requirements, building from source, and verification.
 - [Testing guide](tests/README.md): test coverage and how to run the checks.
