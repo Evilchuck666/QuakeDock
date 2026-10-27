@@ -1,0 +1,109 @@
+{
+  "folders": [
+    {
+      "name": "QuakeDock",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+    "python.testing.unittestEnabled": true,
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestArgs": [
+      "-v",
+      "-s",
+      "./tests",
+      "-p",
+      "test_*.py"
+    ],
+    "python.testing.cwd": "${workspaceFolder}",
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/.ruff_cache": true
+    },
+    "search.exclude": {
+      "**/.venv": true,
+      "**/.venv-build": true,
+      "**/build": true,
+      "**/dist": true,
+      "**/__pycache__": true,
+      "**/.ruff_cache": true
+    },
+    "files.watcherExclude": {
+      "**/.venv/**": true,
+      "**/.venv-build/**": true,
+      "**/build/**": true,
+      "**/dist/**": true,
+      "**/__pycache__/**": true,
+      "**/.ruff_cache/**": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "ms-python.debugpy"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "QuakeDock: launch",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${workspaceFolder:QuakeDock}/quakedock.py",
+        "cwd": "${workspaceFolder:QuakeDock}",
+        "console": "integratedTerminal",
+        "justMyCode": true
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "QuakeDock: tests",
+        "type": "process",
+        "command": "${command:python.interpreterPath}",
+        "args": [
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_*.py",
+          "-v"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:QuakeDock}",
+          "env": {
+            "QT_QPA_PLATFORM": "offscreen"
+          }
+        },
+        "group": {
+          "kind": "test",
+          "isDefault": true
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "QuakeDock: smoke test",
+        "type": "process",
+        "command": "${command:python.interpreterPath}",
+        "args": [
+          "quakedock.py",
+          "--smoke-test"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:QuakeDock}",
+          "env": {
+            "QT_QPA_PLATFORM": "offscreen"
+          }
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
+}
