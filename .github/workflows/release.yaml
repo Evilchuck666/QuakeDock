@@ -76,7 +76,7 @@ jobs:
       - name: Verify standalone X11 startup and shutdown (Linux)
         if: runner.os == 'Linux'
         run: xvfb-run -a python -c 'from pathlib import Path; from scripts.build import verify; verify(Path("dist/QuakeDock"), qt_platform="xcb")'
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: QuakeDock-${{ matrix.os }}
           path: |
