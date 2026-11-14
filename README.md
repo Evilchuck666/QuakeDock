@@ -14,8 +14,10 @@ QuakeDock is a desktop installer and launcher for Quake. It brings the campaign
 and multiplayer into one window, helping you download the game, set up an engine,
 and start playing on Windows, Linux, or macOS.
 
+🌐 **Website:** https://evilchuck666.github.io/QuakeDock/
+
 <!-- SCREENSHOTS:START -->
-## Screenshots
+## 📸 Screenshots
 
 ![QuakeDock campaign setup with vkQuake](site/assets/screenshots/campaign.png)
 
@@ -34,14 +36,7 @@ QuakeDock brings those steps together. Choose how you want to play, pick an
 installation folder, and let the application handle the downloads and setup.
 You can adjust your player settings and launch the game from the same window.
 
-## ⚔️ Two ways to play
-
-| Experience | What you get |
-| --- | --- |
-| **Campaign** | Quake and its expansions with **vkQuake**. |
-| **Multiplayer** | QuakeWorld with **ezQuake**, plus **nQuake** content and addons. |
-
-## ✨ What it does
+## ✨ Features
 
 - Downloads the game through Steam and installs the engine for your chosen experience.
 - Guides you through Steam login and Steam Guard in the application.
@@ -50,17 +45,13 @@ You can adjust your player settings and launch the game from the same window.
 - Preserves existing configuration files, apart from the player settings you edit.
 - Creates a shortcut and lets you launch an installed game without signing in again.
 
-## 🚀 Getting started
+### ⚔️ Two ways to play
 
-1. Download the package for your system from the
-   [latest release](https://github.com/Evilchuck666/QuakeDock/releases/latest).
-2. Extract the package and open **QuakeDock** (`QuakeDock.exe` on Windows).
-3. Choose **Campaign** or **Multiplayer**, select a folder, and enter your Steam
-   username and player name.
-4. Start the installation and follow any Steam authentication prompts.
-5. Once installation finishes, select **Play**. For the campaign, you can also
-   choose an installed expansion.
-   
+| Experience | What you get |
+| --- | --- |
+| **Campaign** | Quake and its expansions with **vkQuake**. |
+| **Multiplayer** | QuakeWorld with **ezQuake**, plus **nQuake** content and addons. |
+
 ## 📥 Download
 
 | Platform | Latest stable release |
@@ -72,7 +63,21 @@ You can adjust your player settings and launch the game from the same window.
 
 [Release notes](https://github.com/Evilchuck666/QuakeDock/releases/latest)
 
-## 📋 What you need
+The packages are not signed, so macOS Gatekeeper and Windows SmartScreen warn
+the first time you open them.
+
+## 🚀 Getting started
+
+1. Download the package for your system from the
+   [latest release](https://github.com/Evilchuck666/QuakeDock/releases/latest).
+2. Extract the package and open **QuakeDock** (`QuakeDock.exe` on Windows).
+3. Choose **Campaign** or **Multiplayer**, select a folder, and enter your Steam
+   username and player name.
+4. Start the installation and follow any Steam authentication prompts.
+5. Once installation finishes, select **Play**. For the campaign, you can also
+   choose an installed expansion.
+
+## 📋 Requirements
 
 - A **Steam account that owns Quake**.
 - An **Internet connection** for installation and enough disk space for the game.
@@ -107,3 +112,7 @@ See the technical guide for native system requirements and verification.
 
 Built with **Qt6 / PySide6**, using **SteamCMD**, **vkQuake**, **ezQuake**, and
 **nQuake** to bring the pieces together.
+
+## ⚖️ License
+
+QuakeDock is free software released under the **GNU General Public License v3.0** (GPL-3.0). See [LICENSE](LICENSE).
