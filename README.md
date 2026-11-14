@@ -22,6 +22,8 @@ and start playing on Windows, Linux, or macOS.
 *The application before installation, captured with isolated settings.*
 [See the multiplayer setup](site/assets/screenshots/multiplayer.png).
 
+<!-- SCREENSHOTS:END -->
+
 ## 🧩 Why QuakeDock?
 
 Getting Quake ready to play can involve several separate tasks: downloading your
