@@ -13,7 +13,10 @@
 QuakeDock is a desktop installer and launcher for Quake. It brings the campaign
 and multiplayer into one window, helping you download the game, set up an engine,
 and start playing on Windows, Linux, or macOS.
-#
+
+<!-- SCREENSHOTS:START -->
+## Screenshots
+
 ![QuakeDock campaign setup with vkQuake](site/assets/screenshots/campaign.png)
 
 *The application before installation, captured with isolated settings.*
