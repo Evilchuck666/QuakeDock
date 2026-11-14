@@ -6,7 +6,7 @@
 ![Requires](https://img.shields.io/badge/requires-Quake%20on%20Steam-blue)
 [![License](https://img.shields.io/badge/license-GPLv3-green)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/Evilchuck666/QuakeDock?label=download&sort=semver)](https://github.com/Evilchuck666/QuakeDock/releases/latest)
-[![Build and tests](https://github.com/Evilchuck666/QuakeDock/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/Evilchuck666/QuakeDock/actions/workflows/release.yml)
+[![Build and tests](https://github.com/Evilchuck666/QuakeDock/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/Evilchuck666/QuakeDock/actions/workflows/release.yaml)
 
 **Back to Quake, with less setup.**
 
