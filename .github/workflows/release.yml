@@ -27,6 +27,10 @@ on:
 permissions:
   contents: read
 
+# Use Node 24 for JavaScript actions, including transitive actions.
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   desktop:
     strategy:
