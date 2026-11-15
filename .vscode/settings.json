@@ -1,0 +1,14 @@
+{
+  // The Python extension selects the uv-managed .venv in this folder
+  // automatically (create it with the "uv: sync" task).
+  "python.testing.unittestEnabled": true,
+  "python.testing.pytestEnabled": false,
+  "python.testing.cwd": "${workspaceFolder}",
+  "python.testing.unittestArgs": ["-v", "-s", "./tests", "-p", "test_*.py"],
+
+  // The code is linted with Ruff (see the noqa codes); 88 is Ruff's line length.
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.rulers": [88]
+  }
+}

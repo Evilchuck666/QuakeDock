@@ -1,0 +1,95 @@
+{
+  // Same commands as README.md, tests/README.md and TECHNICAL_GUIDE.md.
+  "version": "2.0.0",
+  "options": {
+    "cwd": "${workspaceFolder}"
+  },
+  "tasks": [
+    {
+      "label": "uv: sync",
+      "detail": "Create or update .venv from uv.lock",
+      "type": "process",
+      "command": "uv",
+      "args": ["sync", "--locked"],
+      "problemMatcher": []
+    },
+    {
+      "label": "QuakeDock: tests",
+      "detail": "Offline unittest suite",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "--locked", "python", "-m", "unittest", "discover", "-s", "tests", "-v"],
+      "options": {
+        "env": {
+          "QT_QPA_PLATFORM": "offscreen"
+        }
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "QuakeDock: smoke test",
+      "detail": "Check the UI and bundled assets, then exit",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "--locked", "python", "quakedock.py", "--smoke-test"],
+      "options": {
+        "env": {
+          "QT_QPA_PLATFORM": "offscreen"
+        }
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "QuakeDock: build standalone package",
+      "detail": "PyInstaller onefile build, verified and archived in dist/",
+      "type": "process",
+      "linux": {
+        "command": "${workspaceFolder}/scripts/build-linux.sh"
+      },
+      "osx": {
+        "command": "${workspaceFolder}/scripts/build-macos.sh"
+      },
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\scripts\\build-windows.ps1"
+        ]
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Site: check",
+      "detail": "Validate site/ links, images and download targets",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "--locked", "python", "scripts/check-site.py"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Site: capture screenshots",
+      "detail": "Regenerate site/assets/screenshots/*.png",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "--locked", "python", "scripts/capture-screenshots.py"],
+      "options": {
+        "env": {
+          "QT_QPA_PLATFORM": "offscreen"
+        }
+      },
+      "problemMatcher": []
+    }
+  ]
+}

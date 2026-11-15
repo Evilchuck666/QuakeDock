@@ -1,4 +1,7 @@
 {
+  // Workspace-wide editor behaviour lives here. The project toolchain (Python,
+  // tests, debugging, tasks, extensions) lives in .vscode/. Keep each key in one
+  // place only: never add "launch", "tasks" or "extensions" to this file.
   "folders": [
     {
       "name": "QuakeDock",
@@ -6,26 +9,16 @@
     }
   ],
   "settings": {
-    "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
-    "python.testing.unittestEnabled": true,
-    "python.testing.pytestEnabled": false,
-    "python.testing.unittestArgs": [
-      "-v",
-      "-s",
-      "./tests",
-      "-p",
-      "test_*.py"
-    ],
-    "python.testing.cwd": "${workspaceFolder}",
+    // Repository conventions: UTF-8, LF, final newline, no trailing whitespace.
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+
+    // Search already honours .gitignore; these only reduce explorer noise and
+    // keep the watcher off large generated trees (.venv holds Qt/PySide6).
     "files.exclude": {
-      "**/__pycache__": true,
-      "**/.ruff_cache": true
-    },
-    "search.exclude": {
-      "**/.venv": true,
-      "**/.venv-build": true,
-      "**/build": true,
-      "**/dist": true,
       "**/__pycache__": true,
       "**/.ruff_cache": true
     },
@@ -33,77 +26,7 @@
       "**/.venv/**": true,
       "**/.venv-build/**": true,
       "**/build/**": true,
-      "**/dist/**": true,
-      "**/__pycache__/**": true,
-      "**/.ruff_cache/**": true
+      "**/dist/**": true
     }
-  },
-  "extensions": {
-    "recommendations": [
-      "ms-python.python",
-      "ms-python.vscode-pylance",
-      "ms-python.debugpy"
-    ]
-  },
-  "launch": {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "QuakeDock: launch",
-        "type": "debugpy",
-        "request": "launch",
-        "program": "${workspaceFolder:QuakeDock}/quakedock.py",
-        "cwd": "${workspaceFolder:QuakeDock}",
-        "console": "integratedTerminal",
-        "justMyCode": true
-      }
-    ]
-  },
-  "tasks": {
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "label": "QuakeDock: tests",
-        "type": "process",
-        "command": "${command:python.interpreterPath}",
-        "args": [
-          "-m",
-          "unittest",
-          "discover",
-          "-s",
-          "tests",
-          "-p",
-          "test_*.py",
-          "-v"
-        ],
-        "options": {
-          "cwd": "${workspaceFolder:QuakeDock}",
-          "env": {
-            "QT_QPA_PLATFORM": "offscreen"
-          }
-        },
-        "group": {
-          "kind": "test",
-          "isDefault": true
-        },
-        "problemMatcher": []
-      },
-      {
-        "label": "QuakeDock: smoke test",
-        "type": "process",
-        "command": "${command:python.interpreterPath}",
-        "args": [
-          "quakedock.py",
-          "--smoke-test"
-        ],
-        "options": {
-          "cwd": "${workspaceFolder:QuakeDock}",
-          "env": {
-            "QT_QPA_PLATFORM": "offscreen"
-          }
-        },
-        "problemMatcher": []
-      }
-    ]
   }
 }
