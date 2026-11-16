@@ -2,20 +2,7 @@ name: Build Qt6 desktop
 
 on:
   push:
-    paths:
-      - 'quake_gui/**'
-      - 'quake_installer/**'
-      - 'assets/**'
-      - 'tests/**'
-      - 'quakedock.py'
-      - 'scripts/build-*.sh'
-      - 'scripts/build-windows.ps1'
-      - 'scripts/build.py'
-      - 'scripts/QuakeDock.spec'
-      - 'scripts/requirements-*.txt'
-      - 'README.md'
-      - 'TECHNICAL_GUIDE.md'
-      - '.github/workflows/release.yaml'
+    branches: [main]
   pull_request:
   workflow_dispatch:
     inputs:
@@ -32,7 +19,130 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
+  # Keep the workflow visible to required checks; only relevant jobs run.
+  changes:
+    name: Detect relevant changes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      checks: ${{ steps.filter.outputs.checks }}
+      build: ${{ steps.filter.outputs.build }}
+      metadata: ${{ steps.filter.outputs.metadata }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Classify changed files
+        id: filter
+        shell: python
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          CHANGE_FILTERS: |
+            {
+              "checks": {
+                "include": [
+                  "quake_gui/**",
+                  "quake_installer/**",
+                  "assets/**",
+                  "quakedock.py",
+                  "pyproject.toml",
+                  "uv.lock",
+                  ".python-version",
+                  "scripts/build-*.sh",
+                  "scripts/build-windows.ps1",
+                  "scripts/build.py",
+                  "scripts/QuakeDock.spec",
+                  "scripts/requirements-*.txt",
+                  "tests/**",
+                  ".github/workflows/release.yaml"
+                ],
+                "exclude": [
+                  "tests/**.md"
+                ]
+              },
+              "build": {
+                "include": [
+                  "quake_gui/**",
+                  "quake_installer/**",
+                  "assets/**",
+                  "quakedock.py",
+                  "pyproject.toml",
+                  "uv.lock",
+                  ".python-version",
+                  "scripts/build-*.sh",
+                  "scripts/build-windows.ps1",
+                  "scripts/build.py",
+                  "scripts/QuakeDock.spec",
+                  "scripts/requirements-*.txt",
+                  ".github/workflows/release.yaml"
+                ],
+                "exclude": []
+              },
+              "metadata": {
+                "include": [
+                  "README.md",
+                  "TECHNICAL_GUIDE.md",
+                  "LICENSE"
+                ],
+                "exclude": []
+              }
+            }
+        run: |
+          import fnmatch
+          import json
+          import os
+          import re
+          import subprocess
+
+          def git(*args):
+              return subprocess.check_output(['git', *args])
+
+          filters = json.loads(os.environ['CHANGE_FILTERS'])
+          event = json.loads(open(os.environ['GITHUB_EVENT_PATH']).read())
+          event_name = os.environ['EVENT_NAME']
+          force = event_name in ('workflow_dispatch', 'schedule')
+          paths = []
+          if not force:
+              if event_name == 'pull_request':
+                  base = event['pull_request']['base']['sha']
+                  head = event['pull_request']['head']['sha']
+              else:
+                  base, head = event['before'], event['after']
+              if not all(re.fullmatch(r'[0-9a-fA-F]{40,64}', sha) for sha in (base, head)):
+                  raise SystemExit('Invalid Git object ID in event')
+              available = base.strip('0') and subprocess.run(
+                  ['git', 'cat-file', '-e', base + '^{commit}'],
+                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+              ).returncode == 0
+              if not available:
+                  # Initial/force pushes can omit the old commit. Validate everything safely.
+                  force = True
+              else:
+                  if event_name == 'pull_request':
+                      base = git('merge-base', base, head).decode().strip()
+                  paths = git('diff', '--no-renames', '--name-only', '-z', base, head).decode().split('\0')
+                  paths = [path for path in paths if path]
+
+          def matches(path, patterns):
+              # fnmatch's * includes /; a leading **/ also matches root-level files.
+              return any(fnmatch.fnmatchcase(path, pattern) or (
+                  pattern.startswith('**/') and fnmatch.fnmatchcase(path, pattern[3:])
+              ) for pattern in patterns)
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              for name, patterns in filters.items():
+                  selected = force or any(
+                      matches(path, patterns['include']) and not matches(path, patterns.get('exclude', []))
+                      for path in paths
+                  )
+                  value = str(selected).lower()
+                  print(f'{name}={value}', file=output)
+                  print(f'{name}: {value}')
+
   desktop:
+    needs: [changes]
+    if: (needs.changes.outputs.checks == 'true' || needs.changes.outputs.build == 'true')
     strategy:
       fail-fast: false
       matrix:
@@ -65,6 +175,7 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - run: python quakedock.py --smoke-test
       - name: Build and verify the standalone package
+        if: needs.changes.outputs.build == 'true'
         shell: bash
         run: |
           case "${{ runner.os }}" in
@@ -74,9 +185,10 @@ jobs:
           esac
           python scripts/build.py --platform "$target"
       - name: Verify standalone X11 startup and shutdown (Linux)
-        if: runner.os == 'Linux'
+        if: (needs.changes.outputs.build == 'true') && (runner.os == 'Linux')
         run: xvfb-run -a python -c 'from pathlib import Path; from scripts.build import verify; verify(Path("dist/QuakeDock"), qt_platform="xcb")'
       - uses: actions/upload-artifact@v7
+        if: needs.changes.outputs.build == 'true'
         with:
           name: QuakeDock-${{ matrix.os }}
           path: |
@@ -169,3 +281,49 @@ jobs:
             --title "QuakeDock v$VERSION" \
             --generate-notes \
             --latest
+
+  metadata:
+    name: Check packaged documentation
+    needs: [changes]
+    if: needs.changes.outputs.metadata == 'true' && needs.changes.outputs.build != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Check documentation included by the build specification
+        shell: python
+        run: |
+          from pathlib import Path
+
+          spec = Path('scripts/QuakeDock.spec').read_text()
+          for filename in ('README.md', 'TECHNICAL_GUIDE.md'):
+              assert filename in spec, f'{filename} is missing from the build specification'
+              assert Path(filename).read_text(encoding='utf-8').strip(), f'{filename} is empty'
+          assert Path('LICENSE').read_text(encoding='utf-8').strip(), 'LICENSE is empty'
+      - name: Validate the build specification without compiling Qt
+        run: python3 -m unittest discover -s tests -p test_build_spec.py -v
+
+  result:
+    name: CI result
+    if: always()
+    needs: [changes, desktop, release, metadata]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Verify required jobs
+        shell: python
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          import json
+          import os
+
+          results = json.loads(os.environ['RESULTS'])
+          failed = [name for name, job in results.items() if job['result'] in ('failure', 'cancelled')]
+          if results['changes']['result'] != 'success':
+              failed.append('changes')
+          if failed:
+              raise SystemExit('Unsuccessful jobs: ' + ', '.join(sorted(set(failed))))
+          print('All relevant jobs passed; unrelated jobs were skipped.')
