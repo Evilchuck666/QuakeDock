@@ -213,8 +213,8 @@ wheels = [
 
 [[package]]
 name = "quakedock"
-version = "0.0.0"
-source = { virtual = "." }
+version = "1.1.1"
+source = { editable = "." }
 dependencies = [
     { name = "certifi" },
     { name = "pyside6" },

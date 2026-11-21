@@ -100,7 +100,7 @@ and run from the repository root:
 
 ```sh
 uv sync --locked
-uv run --locked python quakedock.py
+uv run --locked quakedock
 ```
 
 This creates `.venv` with Python 3.13 and the locked development dependencies.

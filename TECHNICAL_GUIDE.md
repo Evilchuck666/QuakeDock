@@ -76,7 +76,7 @@ these commands from the repository root:
 
 ```sh
 uv sync --locked
-uv run --locked python quakedock.py
+uv run --locked quakedock
 ```
 
 `uv sync --locked` creates `.venv`, obtains Python 3.13 if needed (as selected by
@@ -90,7 +90,7 @@ To verify the environment or build the application:
 
 ```sh
 uv run --locked python -m unittest discover -s tests -v
-uv run --locked python quakedock.py --smoke-test
+uv run --locked quakedock --smoke-test
 uv run --locked python -m PyInstaller --noconfirm scripts/QuakeDock.spec
 ```
 
