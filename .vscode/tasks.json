@@ -35,7 +35,7 @@
       "detail": "Check the UI and bundled assets, then exit",
       "type": "process",
       "command": "uv",
-      "args": ["run", "--locked", "python", "quakedock.py", "--smoke-test"],
+      "args": ["run", "--locked", "quakedock", "--smoke-test"],
       "options": {
         "env": {
           "QT_QPA_PLATFORM": "offscreen"
