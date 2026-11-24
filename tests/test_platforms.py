@@ -12,7 +12,7 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-from quake_installer import config, ezquake, vkquake
+from quakedock.core import config, ezquake, vkquake
 
 
 def release_asset(name):

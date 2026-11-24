@@ -11,9 +11,9 @@ from contextlib import redirect_stderr, redirect_stdout
 
 from PySide6.QtCore import QThread, Signal
 
-from quake_installer import ezquake, gamedata, interactive, steamcmd, vkquake
-from quake_installer.config import STEAMCMD_DIR, parse_install_dir
-from quake_installer.events import Cancelled, Observer, observe
+from quakedock.core import ezquake, gamedata, interactive, steamcmd, vkquake
+from quakedock.core.config import STEAMCMD_DIR, parse_install_dir
+from quakedock.core.events import Cancelled, Observer, observe
 
 from .library import ASSETS, configure, create_shortcut
 

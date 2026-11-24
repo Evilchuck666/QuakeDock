@@ -1,15 +1,16 @@
 # GUI and installer tests
 
-QuakeDock has one user interface: the Qt application started by `quakedock.py`
-or the standalone executable. `quake_gui/worker.py` coordinates installation;
-`quake_installer/` contains the backend shared by both game editions.
+QuakeDock has one user interface: the Qt application started by `uv run quakedock`
+(or `run.py`) and the standalone executable. `src/quakedock/gui/worker.py`
+coordinates installation; `src/quakedock/core/` contains the backend shared by
+both game editions.
 
 Install the development dependencies and run the offline checks:
 
 ```sh
 uv sync --locked
 uv run --locked python -m unittest discover -s tests -v
-uv run --locked python quakedock.py --smoke-test
+uv run --locked quakedock --smoke-test
 ```
 
 On a headless Linux host, set `QT_QPA_PLATFORM=offscreen`. The **Build Qt6 desktop**

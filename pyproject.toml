@@ -1,6 +1,6 @@
 [project]
 name = "quakedock"
-version = "1.1.2"
+dynamic = ["version"]
 description = "Desktop installer and launcher for Quake"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -11,16 +11,20 @@ dependencies = [
     "pywinpty>=3.0.5,<4; sys_platform == 'win32'",
 ]
 
+[project.scripts]
+quakedock = "quakedock.__main__:run"
+
 [dependency-groups]
 dev = ["PyInstaller>=6.16,<7"]
-
-[project.scripts]
-quakedock = "quakedock:run"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.version]
+# Single source of truth for the version: bump it there before a release.
+path = "src/quakedock/__init__.py"
+
 [tool.hatch.build.targets.wheel]
-# Editable install: the app keeps loading assets from the checkout.
-include = ["quakedock.py", "quake_gui", "quake_installer"]
+# Editable install: the app keeps loading assets/ from the checkout.
+packages = ["src/quakedock"]

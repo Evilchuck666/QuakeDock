@@ -6,7 +6,7 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
-import quakedock
+import quakedock.__main__ as quakedock
 
 
 class StartupTests(unittest.TestCase):

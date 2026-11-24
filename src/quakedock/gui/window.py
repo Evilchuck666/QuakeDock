@@ -41,8 +41,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from quake_installer.config import parse_install_dir
-from quake_installer.runtime import external_libraries
+from quakedock.core.config import parse_install_dir
+from quakedock.core.runtime import external_libraries
 
 from .library import (
     ASSETS,

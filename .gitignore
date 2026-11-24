@@ -13,7 +13,7 @@ __pycache__/
 # Ruff
 .ruff_cache/
 
-# Smoke-test preview: quakedock.py --smoke-test --screenshot preview.png
+# Smoke-test preview: run.py --smoke-test --screenshot preview.png
 /preview.png
 
 # OS metadata (the application is built on Linux, Windows and macOS)

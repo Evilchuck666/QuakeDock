@@ -12,8 +12,8 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
-from quake_installer import gamedata, interactive, steamcmd, windows_console
-from quake_installer.events import Cancelled, Observer, observe
+from quakedock.core import gamedata, interactive, steamcmd, windows_console
+from quakedock.core.events import Cancelled, Observer, observe
 
 
 class ConsoleTransportTests(unittest.TestCase):

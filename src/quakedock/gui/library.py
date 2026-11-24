@@ -2,20 +2,37 @@
 
 from __future__ import annotations
 
+import importlib.util
 import math
 import platform
 import re
 import shutil
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from assets.scripts.ezQuake import launcher as ez_launcher
-from assets.scripts.vkQuake import launcher as vk_launcher
-from quake_installer import shortcuts
-from quake_installer.config import INSTALL_MULTIPLAYER_DIR, INSTALL_SINGLE_PLAYER_DIR
-from quake_installer.runtime import external_environment
+from quakedock.core import shortcuts
+from quakedock.core.config import INSTALL_MULTIPLAYER_DIR, INSTALL_SINGLE_PLAYER_DIR
+from quakedock.core.runtime import external_environment
 
-ASSETS = Path(__file__).resolve().parent.parent / "assets"
+# The checkout root from source (src/quakedock/gui/ -> root), or PyInstaller's bundle.
+ASSETS = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[3])) / "assets"
+
+
+def load_launcher(engine):
+    """Import the standalone launcher script that ships in assets/scripts/<engine>/."""
+    name = f"quakedock.launchers.{engine.lower()}"
+    spec = importlib.util.spec_from_file_location(
+        name, ASSETS / "scripts" / engine / "launcher.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+vk_launcher = load_launcher("vkQuake")
+ez_launcher = load_launcher("ezQuake")
 
 
 @dataclass(frozen=True)

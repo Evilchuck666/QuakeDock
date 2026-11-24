@@ -15,7 +15,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from quake_installer import shortcuts
+from quakedock.core import shortcuts
 
 
 class ShortcutTests(unittest.TestCase):

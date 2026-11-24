@@ -7,12 +7,12 @@ import sys
 import tempfile
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from PySide6.QtCore import QSettings
 from PySide6.QtWidgets import QApplication, QToolButton
 
-from quake_gui.window import MainWindow
+from quakedock.gui.window import MainWindow
 
 
 def main():

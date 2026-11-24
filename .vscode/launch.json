@@ -5,7 +5,7 @@
       "name": "QuakeDock",
       "type": "debugpy",
       "request": "launch",
-      "program": "${workspaceFolder}/quakedock.py",
+      "program": "${workspaceFolder}/run.py",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal"
     },
@@ -13,7 +13,7 @@
       "name": "QuakeDock: smoke test",
       "type": "debugpy",
       "request": "launch",
-      "program": "${workspaceFolder}/quakedock.py",
+      "program": "${workspaceFolder}/run.py",
       "args": ["--smoke-test"],
       "cwd": "${workspaceFolder}",
       "env": {

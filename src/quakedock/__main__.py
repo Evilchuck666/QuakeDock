@@ -1,5 +1,8 @@
-#!/usr/bin/env python3
-"""Start the Qt6 application, from source or from its self-contained bundle."""
+"""Entry point.
+
+quakedock                                    the application
+quakedock --smoke-test [--screenshot FILE]   check the UI and bundled assets, then exit
+"""
 
 from __future__ import annotations
 
@@ -10,7 +13,9 @@ from pathlib import Path
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        prog="quakedock", description="Desktop installer and launcher for Quake"
+    )
     parser.add_argument(
         "--smoke-test",
         action="store_true",
@@ -27,9 +32,9 @@ def main(argv=None):
     from PySide6.QtCore import QLockFile, QSettings, QTemporaryDir, QTimer
     from PySide6.QtWidgets import QApplication, QMessageBox
 
-    from quake_gui.library import ASSETS, EDITIONS, configure, read_player
-    from quake_gui.window import MainWindow
-    from quake_installer.config import BASE_DIR
+    from quakedock.core.config import BASE_DIR
+    from quakedock.gui.library import ASSETS, EDITIONS, configure, read_player
+    from quakedock.gui.window import MainWindow
 
     app = QApplication([sys.argv[0]])
     app.setApplicationName("QuakeDock")
@@ -71,7 +76,7 @@ def main(argv=None):
                 if sys.platform == "win32":
                     # Exercise the bundled native extension from the windowed
                     # executable, without relying on an external Python.
-                    from quake_installer.windows_console import smoke_test
+                    from quakedock.core.windows_console import smoke_test
 
                     smoke_test(temporary.path())
                 for key, edition in EDITIONS.items():

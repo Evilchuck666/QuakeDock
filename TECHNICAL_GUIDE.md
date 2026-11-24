@@ -136,7 +136,7 @@ python -m venv .venv
 source .venv/bin/activate
 # Windows PowerShell: .venv\Scripts\Activate.ps1
 python -m pip install -r scripts/requirements-build.txt
-python quakedock.py
+python run.py
 python -m PyInstaller --noconfirm scripts/QuakeDock.spec
 ```
 
@@ -192,12 +192,15 @@ licenses. Qt/PySide6 are distributed as dynamic libraries.
 ## Verification
 
 ```sh
-python -m unittest discover -s tests -v
-python quakedock.py --smoke-test
+PYTHONPATH=src python -m unittest discover -s tests -v
+python run.py --smoke-test
 ```
 
-On headless Linux, prefix the command with `QT_QPA_PLATFORM=offscreen`. To save
-a window preview: `python quakedock.py --smoke-test --screenshot preview.png`.
+The tests import the `quakedock` package from `src/`: `uv run` installs it, while
+a plain virtual environment needs `src` on `PYTHONPATH` (in PowerShell,
+`$env:PYTHONPATH = 'src'`), as CI does. `run.py` finds it on its own.
+On headless Linux, prefix the commands with `QT_QPA_PLATFORM=offscreen`. To save
+a window preview: `python run.py --smoke-test --screenshot preview.png`.
 Also check the compiled package:
 
 ```sh

@@ -10,7 +10,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from quake_gui.library import (
+from quakedock.gui.library import (
     EDITIONS,
     configure,
     create_shortcut,
@@ -18,8 +18,8 @@ from quake_gui.library import (
     launch_command,
     read_player,
 )
-from quake_installer import console, interactive, steamcmd
-from quake_installer.events import Cancelled, Observer, observe
+from quakedock.core import console, interactive, steamcmd
+from quakedock.core.events import Cancelled, Observer, observe
 
 
 class DesktopConfigTests(unittest.TestCase):
@@ -33,8 +33,8 @@ class DesktopConfigTests(unittest.TestCase):
                 with (
                     self.subTest(edition=edition.key, system=system),
                     tempfile.TemporaryDirectory() as temporary,
-                    patch("quake_gui.library.platform.system", return_value=system),
-                    patch("quake_gui.library.shortcuts." + helper) as create,
+                    patch("quakedock.gui.library.platform.system", return_value=system),
+                    patch("quakedock.gui.library.shortcuts." + helper) as create,
                     patch.object(edition.launcher, "resolve_engine") as resolve,
                     patch.object(sys, "frozen", True, create=True),
                 ):
@@ -103,7 +103,7 @@ class DesktopConfigTests(unittest.TestCase):
                         patch.object(
                             edition.launcher, "resolve_engine", return_value=engine
                         ),
-                        patch("quake_gui.library.platform.system", return_value=system),
+                        patch("quakedock.gui.library.platform.system", return_value=system),
                     ):
                         command = launch_command(edition, root, "hipnotic")
                         self.assertEqual(command[0], str(engine))
@@ -268,7 +268,7 @@ class DesktopProcessTests(unittest.TestCase):
         self.assertEqual(progress[-1], (8, 20, "Download"))
 
     def test_observer_is_thread_local_and_cancelled_downloads_raise(self):
-        from quake_installer.events import current
+        from quakedock.core.events import current
 
         child_values = []
 

@@ -1,5 +1,6 @@
 # Build on the target OS: python -m PyInstaller --noconfirm scripts/QuakeDock.spec
 from pathlib import Path
+import ast
 import importlib
 import sys
 from PyInstaller.utils.hooks import collect_all
@@ -28,16 +29,26 @@ if dependency_errors:
 console_datas, console_binaries, console_imports = (
     collect_all("winpty") if sys.platform == "win32" else ([], [], [])
 )
+# The engine launchers ship as files and are loaded by path at runtime
+# (quakedock.gui.library.load_launcher), so PyInstaller cannot see their imports.
+launcher_imports = set()
+for launcher in (root / "assets" / "scripts").glob("*/launcher.py"):
+    for node in ast.walk(ast.parse(launcher.read_text(encoding="utf-8"))):
+        if isinstance(node, ast.Import):
+            launcher_imports.update(alias.name for alias in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
+            launcher_imports.add(node.module)
 analysis = Analysis(
-    [str(root / "quakedock.py")],
-    pathex=[str(root)],
+    [str(root / "run.py")],
+    pathex=[str(root / "src")],
     datas=[(str(root / "assets" / "cfg"), "assets/cfg"),
            (str(root / "assets" / "icons"), "assets/icons"),
            (str(root / "assets" / "links"), "assets/links"),
+           (str(root / "assets" / "scripts"), "assets/scripts"),
            (str(root / "README.md"), "."),
            (str(root / "TECHNICAL_GUIDE.md"), ".")] + console_datas,
     binaries=console_binaries,
-    hiddenimports=["certifi"] + console_imports,
+    hiddenimports=["certifi"] + sorted(launcher_imports) + console_imports,
     excludes=["tkinter", "PyQt5", "PyQt6", "PySide2"],
     noarchive=False,
 )

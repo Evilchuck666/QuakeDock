@@ -17,10 +17,10 @@ if HAS_QT:
     from PySide6.QtTest import QTest
     from PySide6.QtWidgets import QApplication
 
-    from quake_gui.library import ASSETS, EDITIONS, configure
-    from quake_gui.window import MainWindow
-    from quake_gui.worker import InstallWorker
-    from quake_installer import (
+    from quakedock.gui.library import ASSETS, EDITIONS, configure
+    from quakedock.gui.window import MainWindow
+    from quakedock.gui.worker import InstallWorker
+    from quakedock.core import (
         ezquake,
         gamedata,
         interactive,
@@ -143,10 +143,10 @@ class DesktopQtTests(unittest.TestCase):
                 worker.completed.connect(outcomes.append)
                 worker.failed.connect(failures.append)
                 stack.enter_context(
-                    patch("quake_gui.worker.platform.system", return_value="Linux")
+                    patch("quakedock.gui.worker.platform.system", return_value="Linux")
                 )
                 stack.enter_context(
-                    patch("quake_gui.worker.platform.machine", return_value="x86_64")
+                    patch("quakedock.gui.worker.platform.machine", return_value="x86_64")
                 )
                 stack.enter_context(patch.object(steamcmd, "check_rosetta"))
                 stack.enter_context(
@@ -224,20 +224,20 @@ class DesktopQtTests(unittest.TestCase):
         for edition in EDITIONS.values():
             campaign = edition.key == "singleplayer"
             steps = [
-                "quake_gui.worker.steamcmd.check_rosetta",
-                "quake_gui.worker.steamcmd.install_steamcmd",
-                "quake_gui.worker.steamcmd.update_steamcmd",
-                "quake_gui.worker.interactive.login",
-                "quake_gui.worker.gamedata.download_quake",
-                "quake_gui.worker.gamedata.install_single_player_game_data"
+                "quakedock.gui.worker.steamcmd.check_rosetta",
+                "quakedock.gui.worker.steamcmd.install_steamcmd",
+                "quakedock.gui.worker.steamcmd.update_steamcmd",
+                "quakedock.gui.worker.interactive.login",
+                "quakedock.gui.worker.gamedata.download_quake",
+                "quakedock.gui.worker.gamedata.install_single_player_game_data"
                 if campaign
-                else "quake_gui.worker.gamedata.install_multiplayer_game_data",
-                "quake_gui.worker.vkquake.install_vkquake"
+                else "quakedock.gui.worker.gamedata.install_multiplayer_game_data",
+                "quakedock.gui.worker.vkquake.install_vkquake"
                 if campaign
-                else "quake_gui.worker.ezquake.install_ezquake",
-                "quake_gui.worker.configure",
-                "quake_gui.worker.create_shortcut",
-                "quake_gui.worker.gamedata.clean_up",
+                else "quakedock.gui.worker.ezquake.install_ezquake",
+                "quakedock.gui.worker.configure",
+                "quakedock.gui.worker.create_shortcut",
+                "quakedock.gui.worker.gamedata.clean_up",
             ]
             for failed_step in range(4, len(steps) - 1):
                 with (
@@ -249,7 +249,7 @@ class DesktopQtTests(unittest.TestCase):
                     stack.enter_context(
                         patch.object(edition.launcher, "resolve_engine")
                     )
-                    stack.enter_context(patch("quake_gui.worker.shutil.copyfile"))
+                    stack.enter_context(patch("quakedock.gui.worker.shutil.copyfile"))
                     worker = InstallWorker(
                         edition, self.root / edition.key, "account", {}
                     )
@@ -323,7 +323,7 @@ class DesktopQtTests(unittest.TestCase):
             "-c",
             "from pathlib import Path; Path('child.txt').write_text('played')",
         ]
-        with patch("quake_gui.window.launch_command", return_value=command):
+        with patch("quakedock.gui.window.launch_command", return_value=command):
             window.play()
             self.pump_until(lambda: window.game is None)
         self.assertEqual(output.read_text(), "played")

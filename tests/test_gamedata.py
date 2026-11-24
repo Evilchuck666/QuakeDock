@@ -13,7 +13,7 @@ from unittest.mock import patch
 
 from tqdm import tqdm
 
-from quake_installer import gamedata
+from quakedock.core import gamedata
 
 
 class MultiplayerGameDataTests(unittest.TestCase):

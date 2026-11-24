@@ -12,13 +12,13 @@ import zipfile
 from pathlib import Path
 from unittest.mock import patch
 
-from quake_installer import config, ezquake, gamedata, shortcuts, vkquake
+from quakedock.core import config, ezquake, gamedata, shortcuts, vkquake
 
 HAS_QT = importlib.util.find_spec("PySide6") is not None
 if HAS_QT:
-    from quake_gui.library import EDITIONS, launch_command
-    from quake_gui.worker import InstallWorker
-    from quake_installer import interactive, steamcmd
+    from quakedock.gui.library import EDITIONS, launch_command
+    from quakedock.gui.worker import InstallWorker
+    from quakedock.core import interactive, steamcmd
 
 
 @unittest.skipUnless(
