@@ -30,6 +30,8 @@ jobs:
     name: Validate project page
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    outputs:
+      artifact: ${{ steps.artifact.outputs.name }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -38,6 +40,20 @@ jobs:
         shell: bash
         run: |
           python3 scripts/check-site.py
+      # Upload here and deploy in the next job: deploy-pages can miss an artifact
+      # uploaded a second earlier in the same job. The name is per attempt, so
+      # "Re-run all jobs" doesn't leave two artifacts with one name, and the deploy
+      # job reads it from this job's outputs, so "Re-run failed jobs" still finds it.
+      - name: Name the page artifact
+        id: artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: echo "name=github-pages-${{ github.run_attempt }}" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-pages-artifact@v5
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          name: ${{ steps.artifact.outputs.name }}
+          path: site
+          include-hidden-files: true
 
   deploy:
     needs: validate
@@ -51,14 +67,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
       - uses: actions/configure-pages@v6
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: site
-          include-hidden-files: true
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+        with:
+          artifact_name: ${{ needs.validate.outputs.artifact }}
