@@ -26,6 +26,20 @@ Python, pip, or Qt. Extract the package and open `QuakeDock` (Linux/macOS) or
 You do not need to install Python, pip, or PySide6, or run any commands.
 **Code → Download ZIP** downloads the source code, not the standalone application.
 
+### Other channels
+
+- **AUR:** [`quakedock-bin`](https://aur.archlinux.org/packages/quakedock-bin)
+  installs the GNU/Linux x64 executable of each release as `/usr/bin/quakedock`,
+  with a desktop entry, the icon and the system libraries it needs: Qt's X11 and
+  Wayland libraries, SteamCMD's 32-bit runtime (`lib32-gcc-libs`, from the
+  multilib repository) and `fuse2` for the vkQuake and ezQuake AppImages.
+  It repackages the tested release executable instead of building from source.
+- **PyPI:** [`quakedock`](https://pypi.org/project/quakedock/) is a regular
+  Python package (Python 3.10 or newer) that runs on the installed PySide6. Its
+  wheel carries the icons, game configs, shortcut templates and engine launchers
+  inside the package, as `quakedock/assets/`. Install it with
+  `uv tool install quakedock` or `pipx install quakedock`.
+
 The GUI and its installation logic are written in Python;
 PyInstaller bundles the interpreter into the application using `onefile` mode.
 At startup, it extracts libraries and resources to a temporary folder, which it
@@ -168,13 +182,6 @@ If you previously built the directory format, PyInstaller replaces
 `dist/QuakeDock/` with the executable when rebuilding with `--noconfirm`.
 Previously downloaded packages retain their original format.
 
-The **Build Qt6 desktop** workflow builds, verifies, and archives the applications
-for Linux x64, Windows x64, macOS Intel, and Apple Silicon. The artifacts are
-unsigned packages. To publish a release, run the workflow manually from `main`
-with an unused version in `MAJOR.MINOR.PATCH` format, without a leading `v`.
-After all builds pass, it creates the version tag and publishes the four packages
-and `SHA256SUMS.txt` as the latest GitHub release.
-
 On Linux, the executable uses the desktop's `libxkbcommon` and
 `libxkbcommon-x11` together. Bundling only one can crash on newer distributions
 such as Artix when Qt releases its X11 keyboard state. Both must be installed
@@ -183,11 +190,58 @@ checks standalone startup and shutdown through X11 under Xvfb.
 
 Standalone does not mean independent of the operating system: Linux needs
 Qt-compatible desktop/graphics libraries, SteamCMD's 32-bit dependencies, and
-the dependencies required by AppImages; macOS on Apple Silicon requires Rosetta
-for SteamCMD. Build on the oldest Linux distribution you want to support;
-compatibility with an older glibc is not guaranteed.
+the dependencies required by AppImages (the AUR package installs them all);
+macOS on Apple Silicon requires Rosetta for SteamCMD. Build on the oldest Linux
+distribution you want to support; compatibility with an older glibc is not
+guaranteed.
 Packages for public distribution must include their dependencies' notices and
 licenses. Qt/PySide6 are distributed as dynamic libraries.
+
+### Python and AUR packages
+
+```sh
+uv build                               # wheel and source distribution in dist/
+cd arch && updpkgsums && makepkg -si   # AUR package, once the release v<pkgver> exists
+```
+
+`uv build` puts `assets/cfg`, `icons`, `links` and `scripts` in the wheel under
+`quakedock/assets/`. `quakedock.gui.library.assets_dir()` looks for these files
+in the PyInstaller bundle, then in the installed package, then in the source
+checkout (which is what an editable `uv sync` install uses). `arch/PKGBUILD`
+downloads the GNU/Linux package of the release with that version, so it only
+builds once the release exists. Its checksums are `SKIP` in the repository;
+`updpkgsums` fills them in.
+
+### Releases
+
+The **Build Qt6 desktop** workflow builds, verifies, and archives the applications
+for Linux x64, Windows x64, macOS Intel, and Apple Silicon. The artifacts are
+unsigned packages. Every run that touches the application or its packaging also
+builds the Python package: it checks it with `twine`, checks that the wheel
+carries the assets, checks that `arch/PKGBUILD` has the package version, and
+smoke-tests the app installed from the wheel in a clean environment.
+
+To release, bump the version in **both** `src/quakedock/__init__.py`
+(`__version__`) and `arch/PKGBUILD` (`pkgver`) first: the workflow refuses a
+version that doesn't match them, or one whose tag already exists. Then run it
+from `main` with the version in `MAJOR.MINOR.PATCH` format, without a leading
+`v`, from the Actions tab or the command line:
+
+```sh
+gh workflow run release.yaml -R Evilchuck666/QuakeDock -f version=X.Y.Z --ref main
+```
+
+After all builds pass, it creates the version tag and publishes the four packages
+and `SHA256SUMS.txt` as the latest GitHub release. Two jobs then publish the
+other channels:
+
+- **PyPI** uses Trusted Publishing: PyPI trusts this workflow file and the
+  `pypi` environment, so there is no API token.
+- **AUR** copies `arch/PKGBUILD` and `arch/quakedock.desktop` to the
+  `quakedock-bin` package with `pkgrel=1`, fills in the checksums of the release
+  just published with `updpkgsums`, builds the package to check it and
+  regenerates `.SRCINFO` before pushing. It needs the `AUR_SSH_PRIVATE_KEY`
+  secret, whose public key is in the maintainer's AUR account.
 
 ## Verification
 

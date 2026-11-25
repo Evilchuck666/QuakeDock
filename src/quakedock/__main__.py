@@ -39,6 +39,8 @@ def main(argv=None):
     app = QApplication([sys.argv[0]])
     app.setApplicationName("QuakeDock")
     app.setOrganizationName("QuakeDock")
+    # Matches quakedock.desktop (AUR package), so Wayland shows the window with its icon.
+    app.setDesktopFileName("quakedock")
     app.setStyle("Fusion")
     temporary = None
     lock = None

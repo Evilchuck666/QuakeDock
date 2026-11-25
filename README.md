@@ -66,11 +66,33 @@ You can adjust your player settings and launch the game from the same window.
 The packages are not signed, so macOS Gatekeeper and Windows SmartScreen warn
 the first time you open them.
 
+### 🏹 Arch Linux (AUR)
+
+QuakeDock is in the AUR as
+[quakedock-bin](https://aur.archlinux.org/packages/quakedock-bin): the same
+single executable, with a desktop entry, an icon and the libraries it needs.
+
+```bash
+yay -S quakedock-bin     # or: paru -S quakedock-bin
+```
+
+### 🐍 PyPI
+
+QuakeDock is also on [PyPI](https://pypi.org/project/quakedock/). It needs
+Python 3.10 or newer:
+
+```bash
+uv tool install quakedock     # or: pipx install quakedock
+quakedock
+```
+
 ## 🚀 Getting started
 
 1. Download the package for your system from the
-   [latest release](https://github.com/Evilchuck666/QuakeDock/releases/latest).
-2. Extract the package and open **QuakeDock** (`QuakeDock.exe` on Windows).
+   [latest release](https://github.com/Evilchuck666/QuakeDock/releases/latest),
+   or install it from the AUR or PyPI (see above).
+2. Extract the package and open **QuakeDock** (`QuakeDock.exe` on Windows),
+   or run `quakedock` if you installed it from the AUR or PyPI.
 3. Choose **Campaign** or **Multiplayer**, select a folder, and enter your Steam
    username and player name.
 4. Start the installation and follow any Steam authentication prompts.
@@ -82,7 +104,8 @@ the first time you open them.
 - A **Steam account that owns Quake**.
 - An **Internet connection** for installation and enough disk space for the game.
 - A compatible **Windows, Linux, or macOS** system. Platform requirements are
-  explained in the [technical guide](TECHNICAL_GUIDE.md).
+  explained in the [technical guide](TECHNICAL_GUIDE.md); the AUR package
+  installs the ones for Arch Linux.
 
 The standalone application includes its own Python and Qt runtime, so you do not
 need to install them yourself. SteamCMD, the engines, and the game data are

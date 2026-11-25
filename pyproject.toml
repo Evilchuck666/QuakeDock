@@ -4,12 +4,31 @@ dynamic = ["version"]
 description = "Desktop installer and launcher for Quake"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Games/Entertainment :: First Person Shooters",
+]
+keywords = ["quake", "quakeworld", "vkquake", "ezquake", "nquake", "steam", "launcher", "installer"]
 dependencies = [
     "PySide6>=6.8,<7",
     "tqdm>=4.67,<5",
     "certifi>=2025.1.31",
     "pywinpty>=3.0.5,<4; sys_platform == 'win32'",
 ]
+
+[project.urls]
+Homepage = "https://evilchuck666.github.io/QuakeDock/"
+Source = "https://github.com/Evilchuck666/QuakeDock"
+Issues = "https://github.com/Evilchuck666/QuakeDock/issues"
+Releases = "https://github.com/Evilchuck666/QuakeDock/releases"
 
 [project.scripts]
 quakedock = "quakedock.__main__:run"
@@ -18,13 +37,40 @@ quakedock = "quakedock.__main__:run"
 dev = ["PyInstaller>=6.16,<7"]
 
 [build-system]
-requires = ["hatchling"]
+# 1.27 understands the SPDX license expression above (PEP 639).
+requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
-# Single source of truth for the version: bump it there before a release.
+# Single source of truth for the version: bump it there (and in arch/PKGBUILD) before a release.
 path = "src/quakedock/__init__.py"
 
+# The wheel carries the files the app reads at run time inside the package, as
+# quakedock/assets/, where gui/library.assets_dir() finds them.
 [tool.hatch.build.targets.wheel]
-# Editable install: the app keeps loading assets/ from the checkout.
-packages = ["src/quakedock"]
+only-include = [
+    "src/quakedock",
+    "assets/cfg",
+    "assets/icons",
+    "assets/links",
+    "assets/scripts",
+]
+sources = { "src" = "", "assets" = "quakedock/assets" }
+# hatchling refuses editable installs when a rewritten path holds .py files (the
+# launchers in assets/scripts), so uv sync just puts src/ on sys.path and the app
+# reads assets/ from the checkout.
+dev-mode-dirs = ["src"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src/quakedock",
+    "/assets/cfg",
+    "/assets/icons",
+    "/assets/links",
+    "/assets/scripts",
+    "/tests",
+    "/run.py",
+    "/README.md",
+    "/TECHNICAL_GUIDE.md",
+    "/LICENSE",
+]

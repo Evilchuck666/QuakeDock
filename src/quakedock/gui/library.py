@@ -15,8 +15,20 @@ from quakedock.core import shortcuts
 from quakedock.core.config import INSTALL_MULTIPLAYER_DIR, INSTALL_SINGLE_PLAYER_DIR
 from quakedock.core.runtime import external_environment
 
-# The checkout root from source (src/quakedock/gui/ -> root), or PyInstaller's bundle.
-ASSETS = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[3])) / "assets"
+
+def assets_dir():
+    """The bundled files: from PyInstaller, an installed wheel or the source checkout."""
+    if hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / "assets"
+    # A wheel (PyPI) carries them inside the package, as quakedock/assets (see pyproject.toml).
+    package = Path(__file__).resolve().parents[1] / "assets"
+    if package.is_dir():
+        return package
+    # A source checkout, also behind an editable install (src/quakedock/gui/ -> root).
+    return Path(__file__).resolve().parents[3] / "assets"
+
+
+ASSETS = assets_dir()
 
 
 def load_launcher(engine):

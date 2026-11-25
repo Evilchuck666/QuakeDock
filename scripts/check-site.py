@@ -46,6 +46,11 @@ def main():
     for package in ("linux-x64.tar.gz", "windows-x64.zip", "macos-x64.zip", "macos-arm64.zip"):
         assert base + "QuakeDock-" + package in page.links, f"Missing download: {package}"
     assert "https://github.com/Evilchuck666/QuakeDock" in page.links
+    for channel in (
+        "https://aur.archlinux.org/packages/quakedock-bin",
+        "https://pypi.org/project/quakedock/",
+    ):
+        assert channel in page.links, f"Missing install channel: {channel}"
     for capture in ("campaign", "multiplayer"):
         path = f"assets/screenshots/{capture}.png"
         assert path in page.images, f"Missing screenshot: {capture}"
